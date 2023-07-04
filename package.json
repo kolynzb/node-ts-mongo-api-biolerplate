@@ -2,11 +2,18 @@
   "name": "node-ts-mongo-api",
   "version": "1.0.0",
   "description": "Node js typescript mongo db API setup",
-  "main": "index.js",
+  "main": "src/server.ts",
+  "repository": "https://github.com/Student-nest/nest-API.git",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "kolynzb <collinsbenda360@gmail.com> (https://atuhaire.com)",
+  "license": "MIT",
+  "engines": {
+    "node": "18.12.1",
+    "yarn": "1.22.19",
+    "pnpm": "8.1.1"
+  }
 }
