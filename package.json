@@ -1,0 +1,12 @@
+{
+  "name": "node-ts-mongo-api",
+  "version": "1.0.0",
+  "description": "Node js typescript mongo db API setup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
