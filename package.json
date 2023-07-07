@@ -12,12 +12,25 @@
   "author": "kolynzb <collinsbenda360@gmail.com> (https://atuhaire.com)",
   "license": "MIT",
   "engines": {
-    "node": "18.12.1",
+    "node": "v18.16.1",
     "yarn": "1.22.19",
     "pnpm": "8.1.1"
   },
+  "_moduleAliases": {
+    "@controllers": "dist/controllers",
+    "@services": "dist/services",
+    "@middleware": "dist/middleware",
+    "@config": "dist/config",
+    "@routes": "dist/routes",
+    "@utils": "dist/utils",
+    "@schemas": "dist/schemas",
+    "@interfaces": "dist/interfaces",
+    "@types": "dist/types"
+  },
   "devDependencies": {
     "@types/node": "^20.4.0",
+    "module-alias": "^2.2.3",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.6"
   }
 }
