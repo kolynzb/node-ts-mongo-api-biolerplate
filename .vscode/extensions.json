@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "mikestead.dotenv",
+    "usernamehw.errorlens",
+    "eamodio.gitlens",
+    "mongodb.mongodb-vscode",
+    "mrmlnc.vscode-pugbeautify",
+    "streetsidesoftware.code-spell-checker",
+    "codeSTACKr.superhero-extensions",
+    "paulshen.paul-typescript-toolkit",
+    "EditorConfig.EditorConfig",
+    "unifiedjs.vscode-mdx",
+    "esbenp.prettier-vscode"
+  ]
+}
