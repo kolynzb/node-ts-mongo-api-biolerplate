@@ -1,0 +1,10 @@
+{
+    "tabWidth": 2, 
+    "printWidth": 120, 
+    "tslintintegration": true,
+    "endOfLine": "auto",
+    "singleQuote": true, 
+    "trailingComma": "all", 
+    "arrowParams": "avoid", 
+    "semi": true
+}
