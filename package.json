@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Node js typescript mongo db API setup",
   "main": "src/server.ts",
-  "repository": "https://github.com/Student-nest/nest-API.git",
+  "repository": "https://github.com/kolynzb/nest-API.git",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,9 @@
     "node": "18.12.1",
     "yarn": "1.22.19",
     "pnpm": "8.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.0",
+    "typescript": "^5.1.6"
   }
 }
