@@ -10,11 +10,12 @@
       "tsx": false,
       "decorators": true,
       "dynamicImport": true
-    },
-    "target": "es2020",
-    "baseUrl": "."
+    }
+    // "target": "es2020",
+    // "baseUrl": "."
   },
   "module": {
     "type": "commonjs"
-  }
+  },
+  "sourceMaps": "inline"
 }
