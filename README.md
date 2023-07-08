@@ -23,3 +23,5 @@
 - [x] Fast compilation and build process with [SWC]()
 - [] Schema validation with [zod]()
 - [] multi language api with i18bn.
+- [] husky
+- [] commit linters
