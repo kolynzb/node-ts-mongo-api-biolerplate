@@ -1,1 +1,3 @@
+Cloudinary
+Dockerized
 tslintintegration
