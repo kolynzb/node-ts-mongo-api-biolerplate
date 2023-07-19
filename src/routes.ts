@@ -1,10 +1,14 @@
 import express from 'express';
+import authRoutes from '@routes/auth/auth.routes';
+import googleAuthRoutes from '@routes/auth/googleAuth.routes';
+import userRoutes from '@routes/user/user.routes';
+import userPreferenceRoutes from '@routes/user/userPreference.routes';
 
 export default (app: express.Application): void => {
-  // app.use('/api/v1/users', userRoute);
-  // app.use('/api/v1/avatars', avatarRoute);
-  // app.use('/api/v1/blog/articles', articleRoute);
-  // app.use('/api/v1/blog/likes', articleLikeRoute);
-  // app.use('/api/v1/blog/follows', articleFollowRoute);
-  // app.use('/api/v1/blog/categories', articleCategoryRoute);
+  // Authentication
+  app.use(`/api/v1/auth/`, authRoutes);
+  app.use(`/api/v1/auth/google/`, googleAuthRoutes);
+  // User
+  app.use(`/api/v1/users`, userRoutes);
+  app.use(`/api/v1/user-preferences`, userPreferenceRoutes);
 };
