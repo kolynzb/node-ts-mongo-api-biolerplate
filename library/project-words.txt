@@ -1,3 +1,4 @@
 Cloudinary
 Dockerized
+SENDGRID
 tslintintegration
