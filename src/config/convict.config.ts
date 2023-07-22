@@ -23,10 +23,16 @@ const config = convict({
   },
   mongodbUri: {
     doc: 'The MongoDB connection URI.',
-    format: "url",
+    format: 'url',
     default: 'mongodb://localhost:27017/my-database',
     env: 'MONGODB_URI',
     arg: 'mongodb-uri',
+  },
+  saltWorkFactor: {
+    doc: 'Salt factor for password hash',
+    format: Number,
+    default: 12,
+    env: 'SALT_WORK_FACTOR',
   },
 });
 
