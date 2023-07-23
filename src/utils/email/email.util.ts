@@ -2,12 +2,11 @@ import nodemailer, { Transporter } from 'nodemailer';
 import pug from 'pug';
 import { htmlToText } from 'html-to-text';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-
-import log from '../../config/logger.config';
+import log from '@config/logger.config';
 import TemplateManager from './templateManager.util';
 import errorHandler from '../errors/decorators/errorHandler.util';
 import { UserDocument } from 'src/models/user.model';
-
+import appDetails from '@config/appDetails.config';
 
 const { EMAIL_FROM, NODE_ENV, SENDGRID_USERNAME, SENDGRID_PASSWORD, MAILTRAP_USERNAME, MAILTRAP_PASSWORD } =
   process.env;
@@ -37,8 +36,8 @@ class Email implements EmailInterface {
   constructor(user: UserDocument, url?: string) {
     this.url = url;
     this.to = user.email;
-    this.fullName = user.fullName as string | 'Nestling';
-    this.from = `Nest Technologies <${EMAIL_FROM}>`;
+    this.fullName = (user.fullName as string) || appDetails.generalUserName;
+    this.from = `${appDetails.appName} <${EMAIL_FROM || appDetails.emails.from}>`;
   }
 
   /**
@@ -98,7 +97,7 @@ class Email implements EmailInterface {
    */
   @errorHandler
   async sendWelcome(): Promise<void> {
-    await this.send('welcome', 'Welcome to the API Family!');
+    await this.send('welcome', `Welcome to the ${appDetails.appName} Family!`);
   }
 
   /**
