@@ -5,6 +5,7 @@ import { decodedJwt, generateAccessToken, verifyRefreshToken } from '@utils/auth
 import HttpStatusCodes from '@utils/api/httpStatusCode.util';
 import User, { UserDocument } from 'src/models/user.model';
 import generateHashFromString from '@utils/generators/generateHashFromString.util';
+import appSettings from '@config/settings.config';
 
 class AuthService {
   async createUserAndSendWelcomeEmail(
@@ -135,7 +136,7 @@ class AuthService {
     try {
       return await new Email(user, `${confirmationUrl}${verifyEmailToken}`).composeEmail(
         'verifyEmail',
-        'Nest Email verification',
+        `${appSettings.appName} Email verification`,
         { verificationLink: `${confirmationUrl}${verifyEmailToken}` },
       );
     } catch (err) {
