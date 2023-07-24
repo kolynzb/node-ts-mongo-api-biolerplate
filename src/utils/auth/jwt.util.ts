@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import AppError from '../errors/appError.util';
 import { RequestWithUser } from '@interfaces/user.interface';
 import { UserDocument } from 'src/models/user.model';
+import HttpStatusCodes from '@utils/api/httpStatusCode.util';
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'access_token_secret';
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'refresh_token_secret';
@@ -30,7 +31,7 @@ export function verifyAccessToken(token: string): string | object | JwtPayload |
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
     return decoded;
   } catch (err) {
-    return new AppError('Invalid access token', 400);
+    return new AppError('Invalid access token', HttpStatusCodes.BAD_REQUEST);
   }
 }
 
@@ -39,7 +40,7 @@ export function verifyRefreshToken(token: string): string | decodedJwt | object 
     const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET);
     return decoded;
   } catch (err) {
-    return new AppError('invalid refresh token', 400);
+    return new AppError('invalid refresh token', HttpStatusCodes.BAD_REQUEST);
   }
 }
 
