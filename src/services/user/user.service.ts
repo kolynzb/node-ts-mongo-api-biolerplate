@@ -3,7 +3,7 @@ import errorHandler from '@utils/errors/decorators/errorHandler.util';
 import mongoose from 'mongoose';
 import User, { UserDocument } from 'src/models/user.model';
 
-export class UserService extends BaseService<UserDocument> {
+export default class UserService extends BaseService<UserDocument> {
   constructor() {
     super(User);
   }
