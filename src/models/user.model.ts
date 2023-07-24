@@ -45,15 +45,15 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      lowercase: true,
+      // lowercase: true,
       required: [true, 'Email Field Required'],
-      unique: true,
+      unique: [true, 'Email Is Already Taken'],
       match: [/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 'Invalid Email Address'],
     },
     phoneNumber: {
       type: String,
       // required: [true, 'Phone Number Field Required'],
-      unique: true,
+      unique: [true, 'Phone Is Already Taken'],
       validate: [validator.isMobilePhone, 'Please Provide a Valid Phone Number'],
     },
     password: {
@@ -80,7 +80,7 @@ const userSchema = new mongoose.Schema(
       validate: {
         // Only works on CREATE and SAVE!!!
         validator(el: string): boolean {
-          const user = this as UserDocument;
+          const user = this as unknown as UserDocument;
           return el === user.password;
         },
         message: 'PasswordConfirm  Should match Password field!',
@@ -112,6 +112,9 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+/**
+ * Pre-save hook to hash the user's password if it is modified or new.
+ */
 userSchema.pre('save', async function (next) {
   const user = this as UserDocument;
 
@@ -123,8 +126,8 @@ userSchema.pre('save', async function (next) {
 });
 
 /**
- * Query middleware that removes deactivated users t
- * this points to the current query
+ * Query middleware that removes deactivated users  deactivated users from the query results.
+ * `this` points to the current query
  */
 userSchema.pre(/^find/, async function (next) {
   await this.find({ active: { $ne: false } });
@@ -133,14 +136,18 @@ userSchema.pre(/^find/, async function (next) {
 
 /**
  *  Instance method to check password correctness
- * this.password is not available because of the select false
- *
+ *         this.password is not available because of the select false
+ * @param {string} candidatePassword - The candidate password to compare.
+ * @param {string} userPassword - The user's password to compare against.
+ * @returns {Promise<boolean>} A promise that resolves to true if passwords match, false otherwise.
  */
 userSchema.methods.comparePasswords = async function (candidatePassword: string, userPassword: string) {
   return bcrypt.compare(candidatePassword, userPassword);
 };
 
-/** setting password changed at or new user */
+/**
+ * Pre-save hook to set the passwordChangedAt property when the password is changed.
+ */
 userSchema.pre('save', function (next) {
   const user = this as UserDocument;
   if (!user.isModified('password') || user.isNew) return next();
@@ -150,7 +157,9 @@ userSchema.pre('save', function (next) {
 });
 
 /**
- * Check if password changed after token issued
+ * Check if the user's password was changed after a given JWT timestamp.
+ * @param {number} jwtTimestamp - The JWT timestamp to compare against.
+ * @returns {boolean} True if the password was changed after the JWT timestamp, false otherwise.
  */
 userSchema.methods.wasPasswordChanged = function (jwtTimestamp: number) {
   if (!this.passwordChangedAt) return false;
@@ -160,6 +169,10 @@ userSchema.methods.wasPasswordChanged = function (jwtTimestamp: number) {
   return jwtTimestamp < changedAT;
 };
 
+/**
+ * Generate a password reset OTP and update the user's passwordResetOTP and passwordResetOTPExpiresIn properties.
+ * @returns {string} The generated password reset OTP.
+ */
 userSchema.methods.generatePasswordResetOTP = function (): string {
   const resetOTP = otpGeneratorUtil.generate(16, {
     upperCaseAlphabets: true,
@@ -170,6 +183,12 @@ userSchema.methods.generatePasswordResetOTP = function (): string {
   return resetOTP;
 };
 
+/**
+ * Compare candidate password reset OTP with the user's password reset OTP.
+ * @param {string} candidatePasswordResetOTP - The candidate password reset OTP to compare.
+ * @param {string} userPasswordResetOTP - The user's password reset OTP to compare against.
+ * @returns {Promise<boolean>} A promise that resolves to true if OTPs match, false otherwise.
+ */
 userSchema.methods.comparePasswordResetOTPs = async function (
   candidatePasswordResetOTP: string,
   userPasswordResetOTP: string,
@@ -177,6 +196,10 @@ userSchema.methods.comparePasswordResetOTPs = async function (
   return generateHashFromString(candidatePasswordResetOTP) === userPasswordResetOTP;
 };
 
+/**
+ * Generate a verification token for email verification and update the user's verifyEmailToken and verifyEmailTokenExpiresIn properties.
+ * @returns {string} The generated verification token.
+ */
 userSchema.methods.generateVerifyEmailToken = function (): string {
   const resetToken = generateRandHash();
   this.verifyEmailToken = generateHashFromString(resetToken);
@@ -184,6 +207,12 @@ userSchema.methods.generateVerifyEmailToken = function (): string {
   return resetToken;
 };
 
+/**
+ * Compare candidate verification token with the user's verification token.
+ * @param {string} candidateToken - The candidate verification token to compare.
+ * @param {string} userVerifyEmailToken - The user's verification token to compare against.
+ * @returns {Promise<boolean>} A promise that resolves to true if tokens match, false otherwise.
+ */
 userSchema.methods.compareVerifyEmailTokens = async function (candidateToken: string, userVerifyEmailToken: string) {
   return generateHashFromString(candidateToken) === userVerifyEmailToken;
 };
