@@ -1,4 +1,7 @@
+atuhaire
+brcyptjs
 Cloudinary
 Dockerized
+Nodeling
 SENDGRID
 tslintintegration
