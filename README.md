@@ -14,7 +14,7 @@
   - [ ] AWS S3 integration.
   - [ ] Cloudinary Upload Integration.
 - [ ] API Documentation with Swagger.
-- [ ] Project Documentation with Vitepress.
+- [x] Project Documentation with Vitepress.
 - [x] Linters Code Formatters and style guides(_AirBnb_).
 - [ ] unit and integration tests (_using jest ,supertest_).
 - [x] debug tools (_like ndb_).
@@ -24,10 +24,11 @@
 - [x] Robust Error handling.
 - [ ] Dockerized app.
 - [x] Fast compilation and build process with [SWC]()
-- [] Schema validation with [zod]()
+- [ ] Schema validation with [zod]()
 - [ ] multi language api with i18bn.
 - [ ] husky
 - [ ] commit linters
 - [x] VScode extension recommendations and settings.
-      Admin Dashboard(_EJS_)
-- [ ] State of the art admin dashboard template
+
+Admin Dashboard(_EJS_)
+- [ ] State of the art admin dashboard template.
