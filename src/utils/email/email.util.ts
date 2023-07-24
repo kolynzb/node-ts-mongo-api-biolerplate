@@ -6,7 +6,7 @@ import log from '@config/logger.config';
 import TemplateManager from './templateManager.util';
 import errorHandler from '../errors/decorators/errorHandler.util';
 import { UserDocument } from 'src/models/user.model';
-import appDetails from '@config/appDetails.config';
+import appDetails from '@config/settings.config';
 
 const { EMAIL_FROM, NODE_ENV, SENDGRID_USERNAME, SENDGRID_PASSWORD, MAILTRAP_USERNAME, MAILTRAP_PASSWORD } =
   process.env;
