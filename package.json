@@ -28,11 +28,6 @@
   "keywords": [],
   "author": "kolynzb <collinsbenda360@gmail.com> (https://atuhaire.com)",
   "license": "MIT",
-  "engines": {
-    "node": "v18.16.1",
-    "yarn": "1.22.19",
-    "pnpm": "8.1.1"
-  },
   "_moduleAliases": {
     "@controllers": "dist/controllers",
     "@services": "dist/services",
