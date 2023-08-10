@@ -36,6 +36,7 @@
     "@routes": "dist/routes",
     "@utils": "dist/utils",
     "@schemas": "dist/schemas",
+    "@models": "dist/models",
     "@interfaces": "dist/interfaces",
     "@types": "dist/types"
   },

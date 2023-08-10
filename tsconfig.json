@@ -15,6 +15,7 @@
       "@templates/*": ["./src/templates/*"],
       "@config/*": ["./src/config/*"],
       "@schemas/*": ["./src/schemas/*"],
+      "@models/*": ["./src/models/*"],
       "@interfaces/*": ["./src/interfaces/*"],
       "@types/*": ["./src/types/*"]
     }
