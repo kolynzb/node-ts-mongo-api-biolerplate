@@ -62,20 +62,18 @@ export default class GoogleAuthService {
     const userId = payload?.sub;
 
     // Check if the user already exists in your database
-    const user = await User.findOne({ where: { googleId: userId } });
+    let user = await User.findOne({ where: { googleId: userId } });
     if (!user) {
       // If the user doesn't exist, create a new user account in your database
 
-      await User.create({
-        data: {
+      user = await User.create({
           googleId: userId as string,
           firstName: payload?.given_name,
           lastName: payload?.family_name,
           avatar: payload?.picture,
           isEmailVerified: payload?.email_verified,
           email: payload?.email as string,
-        },
-      });
+        });
       return user;
     }
 
@@ -95,15 +93,13 @@ export default class GoogleAuthService {
 
     // Create a new user account in your database
     const user = await User.create({
-      data: {
         googleId: profile?.id,
         firstName: profile?.given_name,
         lastName: profile?.family_name,
         avatar: profile?.picture,
         isEmailVerified: profile?.email_verified,
         email: profile?.email as string,
-      },
-    });
+      });
 
     return user;
   }
