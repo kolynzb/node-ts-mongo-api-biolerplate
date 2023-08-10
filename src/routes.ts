@@ -1,14 +1,18 @@
 import express from 'express';
 import authRoutes from '@routes/auth/auth.routes';
-import googleAuthRoutes from '@routes/auth/googleAuth.routes';
+import googleAuthRoutes from '@routes/auth/google-auth.routes';
 import userRoutes from '@routes/user/user.routes';
-import userPreferenceRoutes from '@routes/user/userPreference.routes';
 
 export default (app: express.Application): void => {
-  // Authentication
+
+  /*
+   * -------- Authentication  -------
+   */
   app.use(`/api/v1/auth/`, authRoutes);
   app.use(`/api/v1/auth/google/`, googleAuthRoutes);
-  // User
+  /*
+  * -------- User  -------
+  */
   app.use(`/api/v1/users`, userRoutes);
-  app.use(`/api/v1/user-preferences`, userPreferenceRoutes);
+
 };
