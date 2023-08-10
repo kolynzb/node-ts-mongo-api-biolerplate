@@ -5,6 +5,8 @@ import { createSendTokenAndCookie } from '@utils/auth/jwt.util';
 import catchAsync from '@utils/errors/decorators/catchAsync.util';
 import { RequestWithUser } from '@interfaces/user.interface';
 import { UserDocument } from 'src/models/user.model';
+import AppError from '@utils/errors/appError.util';
+import HttpStatusCodes from '@utils/api/httpStatusCode.util';
 
 export default class AuthController {
   authService: AuthService;
@@ -56,6 +58,9 @@ export default class AuthController {
   @catchAsync()
   async register(req: Request, res: Response, next: NextFunction) {
     const { email, password, passwordConfirm } = RegisterUserSchema.parse(req.body);
+
+    if (password !== passwordConfirm)  return next(new AppError('Password not Equal to confirm password', HttpStatusCodes.BAD_REQUEST));
+
     const emailUrl = `$req.protocol}://${req.get('host')}/me`;
     const verifyEmailURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verifyEmail/`;
 
@@ -63,7 +68,7 @@ export default class AuthController {
       emailUrl,
       email,
       password,
-      passwordConfirm,
+      // passwordConfirm,
       verifyEmailURL,
       next,
     );
@@ -98,7 +103,7 @@ export default class AuthController {
     const user = await this.authService.changePassword(
       currentPassword,
       newPassword,
-      confirmPassword,
+      // confirmPassword,
       currentUser as UserDocument,
       next,
     );
@@ -109,7 +114,7 @@ export default class AuthController {
   async resendVerificationEmail(req: Request, res: Response, next: NextFunction) {
     const { email } = req.body;
     const validatedEmail = emailSchema.parse(email);
-    const verifyEmailURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verifyEmail/`;
+    const verifyEmailURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verify-email/`;
 
     await this.authService.sendVerificationEmail(validatedEmail, verifyEmailURL, next);
 
@@ -132,10 +137,12 @@ export default class AuthController {
   async changePassword(req: Request, res: Response, next: NextFunction) {
     const { currentPassword, newPassword, confirmPassword } = req.body;
 
+    if ( newPassword !== confirmPassword)  return next(new AppError(' New password not Equal to confirm password', HttpStatusCodes.BAD_REQUEST));
+
     await this.authService.changePassword(
       currentPassword,
       newPassword,
-      confirmPassword,
+      // confirmPassword,
       (req as RequestWithUser).user as UserDocument,
       next,
     );
