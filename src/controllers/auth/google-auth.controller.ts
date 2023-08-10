@@ -6,15 +6,15 @@ import AppError from '@utils/errors/appError.util';
 import HttpStatusCodes from '@utils/api/httpStatusCode.util';
 import { UserDocument } from 'src/models/user.model';
 
+const googleAuthService = new GoogleAuthService();
 export default class GoogleAuthController {
-  private googleAuthService = new GoogleAuthService();
 
   async googleAuthUrl(req: Request, res: Response) {
     const scopes = [
       'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/userinfo.email',
     ];
-    const url = this.googleAuthService.getAuthUrl(scopes);
+    const url = googleAuthService.getAuthUrl(scopes);
     return res.redirect(url);
   }
 
@@ -23,13 +23,13 @@ export default class GoogleAuthController {
 
     try {
       // Exchange authorization code for access and refresh tokens
-      const tokens = await this.googleAuthService.getTokensFromCode(code);
+      const tokens = await googleAuthService.getTokensFromCode(code);
 
       // Set Google OAuth2 credentials using the access token
-      this.googleAuthService.setCredentials(tokens);
+      googleAuthService.setCredentials(tokens);
 
       // Check if the user exists in your database and authenticate the user
-      const user = await this.googleAuthService.authenticate(tokens.id_token as string);
+      const user = await googleAuthService.authenticate(tokens.id_token as string);
 
       const accessToken = generateAccessToken(user as UserDocument);
       const refreshToken = generateRefreshToken(user as UserDocument);
@@ -40,7 +40,7 @@ export default class GoogleAuthController {
         return res.status(200).json({ status: 'success', accessToken, refreshToken, user });
       }
       // If the user does not exist, create a new user account in your database
-      const newUser = await this.googleAuthService.signUp(code);
+      const newUser = await googleAuthService.signUp(code);
 
       // Generate and return the JWT token for the new user
       return res.status(200).json({ status: 'success', accessToken, refreshToken, user: newUser });
