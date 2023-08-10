@@ -10,10 +10,11 @@ export interface UserDocument extends mongoose.Document {
   avatar: string;
   phoneNumber: string;
   email: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   googleId: string;
   password: string;
-  passwordConfirm: string | undefined;
+  // passwordConfirm: string | undefined;
   role: string;
   passwordChangedAt: Date | number;
   passwordResetOTP: string | undefined;
@@ -32,7 +33,7 @@ export interface UserDocument extends mongoose.Document {
   comparePasswordResetOTPs(candidateToken: string, userVerifyEmailToken: string): Promise<boolean>;
 }
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<UserDocument>(
   {
     avatar: {
       type: String, // see if there is a type for a url
@@ -40,20 +41,24 @@ const userSchema = new mongoose.Schema(
     googleId: {
       type: String,
     },
-    fullName: {
+    firstName: {
+      type: String,
+    },
+    lastName: {
       type: String,
     },
     email: {
       type: String,
-      // lowercase: true,
+      lowercase: true,
       required: [true, 'Email Field Required'],
-      unique: [true, 'Email Is Already Taken'],
+      unique: true,
       match: [/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 'Invalid Email Address'],
     },
     phoneNumber: {
       type: String,
+      sparse:true,
       // required: [true, 'Phone Number Field Required'],
-      unique: [true, 'Phone Is Already Taken'],
+      unique: true,
       validate: [validator.isMobilePhone, 'Please Provide a Valid Phone Number'],
     },
     password: {
@@ -74,18 +79,18 @@ const userSchema = new mongoose.Schema(
           'Password must contain at least 1 lowercase, 1 uppercase, 1 number, 1 symbol and must contain at least 8 characters',
       },
     },
-    passwordConfirm: {
-      type: String,
-      required: [true, 'Please confirm your password'],
-      validate: {
-        // Only works on CREATE and SAVE!!!
-        validator(el: string): boolean {
-          const user = this as unknown as UserDocument;
-          return el === user.password;
-        },
-        message: 'PasswordConfirm  Should match Password field!',
-      },
-    },
+    // passwordConfirm: {
+    //   type: String,
+    //   required: [true, 'Please confirm your password'],
+    //   validate: {
+    //     // Only works on CREATE and SAVE!!!
+    //     validator(el: string): boolean {
+    //       const user = this as unknown as UserDocument;
+    //       return el === user.password;
+    //     },
+    //     message: 'PasswordConfirm  Should match Password field!',
+    //   },
+    // },
     passwordChangedAt: Date,
     passwordResetOTP: String,
     passwordResetOTPExpiresIn: Date,
@@ -121,7 +126,7 @@ userSchema.pre('save', async function (next) {
   if (!user.isModified('password')) return next();
   const SALT_WORK_FACTOR = await bcrypt.genSalt(config.get('saltWorkFactor'));
   user.password = await bcrypt.hash(user.password, SALT_WORK_FACTOR);
-  user.passwordConfirm = undefined;
+  // user.passwordConfirm = undefined;
   return next();
 });
 
@@ -129,10 +134,10 @@ userSchema.pre('save', async function (next) {
  * Query middleware that removes deactivated users  deactivated users from the query results.
  * `this` points to the current query
  */
-userSchema.pre(/^find/, async function (next) {
-  await this.find({ active: { $ne: false } });
-  next();
-});
+// userSchema.pre(/^find/, async function (next:any) {
+//   await (this as any).find({ active: true });
+//   next();
+// });
 
 /**
  *  Instance method to check password correctness
@@ -211,9 +216,9 @@ userSchema.methods.generateVerifyEmailToken = function (): string {
  * Compare candidate verification token with the user's verification token.
  * @param {string} candidateToken - The candidate verification token to compare.
  * @param {string} userVerifyEmailToken - The user's verification token to compare against.
- * @returns {Promise<boolean>} A promise that resolves to true if tokens match, false otherwise.
+ * @returns {boolean} returns true if tokens match.
  */
-userSchema.methods.compareVerifyEmailTokens = async function (candidateToken: string, userVerifyEmailToken: string) {
+userSchema.methods.compareVerifyEmailTokens =  function (candidateToken: string, userVerifyEmailToken: string): boolean {
   return generateHashFromString(candidateToken) === userVerifyEmailToken;
 };
 
