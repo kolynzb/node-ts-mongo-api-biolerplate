@@ -14,7 +14,7 @@ const { EMAIL_FROM, NODE_ENV, SENDGRID_USERNAME, SENDGRID_PASSWORD, MAILTRAP_USE
 interface EmailInterface {
   url?: string;
   to: UserDocument['email'];
-  fullName: UserDocument['fullName'];
+  fullName: string;
   from: string;
 }
 
@@ -36,7 +36,7 @@ class Email implements EmailInterface {
   constructor(user: UserDocument, url?: string) {
     this.url = url;
     this.to = user.email;
-    this.fullName = (user.fullName as string) || appDetails.generalUserName;
+    this.fullName = (user.firstName as string) || appDetails.generalUserName;
     this.from = `${appDetails.appName} <${EMAIL_FROM || appDetails.emails.from}>`;
   }
 
