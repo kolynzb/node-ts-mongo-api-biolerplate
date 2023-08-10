@@ -23,7 +23,7 @@ const config = convict({
   },
   mongodbUri: {
     doc: 'The MongoDB connection URI.',
-    format: 'url',
+    format: String,
     default: 'mongodb://localhost:27017/my-database',
     env: 'MONGODB_URI',
     arg: 'mongodb-uri',
