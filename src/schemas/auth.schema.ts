@@ -1,11 +1,5 @@
 import { z } from 'zod';
 
-export const RegisterUserSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-});
-
-export const emailSchema = z.string().email();
 export const passwordSchema = z
   .string()
   .min(8, 'Password must be at least 8 characters long')
@@ -13,6 +7,15 @@ export const passwordSchema = z
   .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]/, {
     message: 'Password must contain at least one letter, one number, and one special character',
   });
+
+export const RegisterUserSchema = z.object({
+  email: z.string().email(),
+  password: passwordSchema,
+  passwordConfirm: z.string(),
+  
+});
+
+export const emailSchema = z.string().email();
 
 export const LoginUserSchema = z.object({
   email: z.string().email(),
