@@ -12,11 +12,10 @@ class AuthService {
     emailUrl: string,
     email: string,
     password: string,
-    passwordConfirm: string,
     confirmationUrl: string,
     next: NextFunction,
   ) {
-    const newUser = await User.create({ email, password, passwordConfirm });
+    const newUser = await User.create({ email, password });
 
     if (!newUser) next(new AppError('Something went wrong', HttpStatusCodes.FORBIDDEN));
 
@@ -109,7 +108,7 @@ class AuthService {
   async changePassword(
     currentPassword: string,
     newPassword: string,
-    passwordConfirm: string,
+    // passwordConfirm: string,
     currentUser: UserDocument,
     next: NextFunction,
   ) {
@@ -122,7 +121,6 @@ class AuthService {
       return next(new AppError('Password is Wrong', HttpStatusCodes.UNAUTHORIZED));
 
     user.password = newPassword;
-    user.passwordConfirm = passwordConfirm;
     user.save();
     return user;
   }
@@ -155,9 +153,11 @@ class AuthService {
 
   async verifyEmail(token: string, next: NextFunction) {
     const user = await User.findOne({
-      verifyEmailTokenExpiresIn: { gt: new Date() },
-      verifyEmailToken: token,
+      verifyEmailTokenExpiresIn: { $gt: new Date() },
+      verifyEmailToken: generateHashFromString(token),
     });
+
+    // TODO: ADD TEMPLATE FOR EXPIRED token
 
     if (!user) return next(new AppError('Token has Expired', HttpStatusCodes.BAD_REQUEST));
 
