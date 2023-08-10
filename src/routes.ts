@@ -8,8 +8,8 @@ export default (app: express.Application): void => {
   /*
    * -------- Authentication  -------
    */
-  app.use(`/api/v1/auth/`, authRoutes);
   app.use(`/api/v1/auth/google/`, googleAuthRoutes);
+  app.use(`/api/v1/auth/`, authRoutes);
   /*
   * -------- User  -------
   */
