@@ -62,7 +62,7 @@ export default class AuthController {
     if (password !== passwordConfirm)  return next(new AppError('Password not Equal to confirm password', HttpStatusCodes.BAD_REQUEST));
 
     const emailUrl = `$req.protocol}://${req.get('host')}/me`;
-    const verifyEmailURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verifyEmail/`;
+    const verifyEmailURL = `${req.protocol}://${req.get('host')}/api/v1/auth/verify-email/`;
 
     const newUser = await this.authService.createUserAndSendWelcomeEmail(
       emailUrl,
